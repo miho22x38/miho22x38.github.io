@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.tsbuildinfo
+*.log
+.vercel/
+.openai/
+shots/
+.env
+.env.*
+!.env.example
+*.zip
+*.tar.gz

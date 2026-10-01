@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {Works} from '../src/Works';
+import {works,groupWorks,type Work} from '../src/data/works';
+assert.equal(works.length,0);
+assert.equal(renderToStaticMarkup(<Works items={works}/>),'');
+// テスト専用のメモリ内データ。公開データには追加しません。
+const records:Work[]=Array.from({length:4},(_,i)=>({id:`test-${i}`,title:`検証${i}`,category:'video',description:'検証',scope:'検証',type:i===0?'original':'client'}));
+records.push({...records[0],id:'sns-check',category:'sns',type:'client',thumbnail:'./images/works/check.webp',url:'https://example.com/'});
+const groups=groupWorks(records);
+assert.deepEqual(groups.map(g=>g.id),['video','sns']);
+assert.deepEqual(groups[0].items.map(w=>w.id),records.slice(0,4).map(w=>w.id));
+const html=renderToStaticMarkup(<Works items={records}/>);
+assert.equal((html.match(/<article>/g)||[]).length,5);
+assert.equal((html.match(/<img /g)||[]).length,1);
+assert.equal((html.match(/オリジナル制作/g)||[]).length,1);
+assert.ok(!html.includes('実案件'));
+assert.equal((html.match(/<a /g)||[]).length,1);
+assert.ok(html.includes('残り1件'));
+assert.ok(!html.includes('works-flyer'));
+assert.ok(html.indexOf('検証3')>html.indexOf('<details'));
+assert.equal(groupWorks(records.slice(1,3))[0].items.length,2);
+assert.ok(!renderToStaticMarkup(<Works items={[{...records[0],thumbnail:' ',url:' '}]}/>).includes('<img'));
+assert.ok(!renderToStaticMarkup(<Works items={[{...records[0],thumbnail:' ',url:' '}]}/>).includes('<a '));
+console.log('PASS: 空表示・分類・順序・件数制限・追加表示・任意画像/URL・制作区分');

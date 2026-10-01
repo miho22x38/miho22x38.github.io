@@ -1,0 +1,1 @@
+export default {content:['./index.html','./src/**/*.{ts,tsx}'],theme:{extend:{colors:{paper:'#F7F2EE',ink:'#332C29',rose:'#E6D2CD',moka:'#8E746A',taupe:'#D6C1B2'},fontFamily:{body:['Noto Sans JP','sans-serif'],display:['Zen Kaku Gothic New','sans-serif'],number:['DM Sans','sans-serif']}}},plugins:[]};

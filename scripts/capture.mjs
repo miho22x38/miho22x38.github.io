@@ -1,0 +1,21 @@
+import puppeteer from 'puppeteer-core';
+import {copyFileSync} from 'node:fs';
+const browser=await puppeteer.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--no-sandbox','--disable-gpu']});
+const page=await browser.newPage();
+await page.setViewport({width:1440,height:1000,deviceScaleFactor:1});
+await page.goto('http://127.0.0.1:5173/',{waitUntil:'networkidle0'});
+await page.evaluate(()=>document.fonts.ready);
+await page.screenshot({path:'shots/desktop.png',fullPage:true});
+await page.screenshot({path:'shots/hero.png'});
+await page.setViewport({width:375,height:812});
+await page.screenshot({path:'shots/mobile-full.png',fullPage:true});
+await page.$eval('#about',e=>e.scrollIntoView());
+await new Promise(r=>setTimeout(r,700));
+await page.screenshot({path:'shots/about-mobile.png'});
+await page.setViewport({width:1200,height:630});
+await page.setContent('<html lang="ja"><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet"></head><body style="margin:0;background:#fff9ee;color:#292724;font-family:Noto Sans JP,sans-serif;display:flex;height:630px;align-items:center"><div style="padding:70px;width:760px;box-sizing:border-box"><div style="display:flex;gap:9px;margin-bottom:30px"><i style="background:#f4ce62;width:28px;height:28px"></i><i style="background:#9bced8;width:28px;height:28px"></i><i style="background:#e98572;width:28px;height:28px"></i></div><p style="font-size:22px">添田 美帆<span style="font-size:16px;margin-left:25px">動画編集｜デザイン・資料作成</span></p><h1 style="font-size:52px;line-height:1.6;letter-spacing:2px">意図を汲み取り、<br>伝わる表現へ。</h1><p style="font-size:17px">チラシ、資料、ショート動画。</p></div><img style="width:440px;height:630px;object-fit:cover;object-position:bottom" src="http://127.0.0.1:5173/images/miho-v2-960.webp"></body></html>',{waitUntil:'domcontentloaded'});
+await page.evaluate(()=>document.fonts.ready);
+await page.screenshot({path:'public/og.jpg',type:'jpeg',quality:88});
+copyFileSync('public/og.jpg','dist/og.jpg');
+await browser.close();
+
