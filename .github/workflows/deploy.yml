@@ -33,7 +33,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          SITE_URL: https://miho22x38.github.io/miho-soeda-portfolio
+          SITE_URL: https://miho22x38.github.io
           SITE_PUBLIC: 'true'
       - name: Configure Pages
         uses: actions/configure-pages@v5
